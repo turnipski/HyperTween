@@ -1,4 +1,20 @@
 {
+    "metadata": [
+        {
+            "src": [
+                {
+                    "src": ".",
+                    "files": [
+                        "dll/HyperWare.HyperTween.dll"
+                    ]
+                }
+            ],
+            "force": true,
+            "globalNamespaceId": "Global",
+            "filter": "filterconfig.yml",
+            "dest": "api"
+        }
+    ],
     "build": {
         "content": [
             {
