@@ -1,0 +1,45 @@
+{
+  "name": "com.hyperware.hypertween",
+  "version": "0.0.1",
+  "displayName": "HyperTween",
+  "description": "HyperTween is a high performance tweening framework built on Unity Entities",
+  "unity": "6000.0",
+  "unityRelease": "36f1",
+  "documentationUrl": "https://github.com/davidrzepa/HyperTween/blob/master/README.md",
+  "changelogUrl": "https://github.com/davidrzepa/HyperTween/blob/master/CHANGELOG.md",
+  "licensesUrl": "https://github.com/davidrzepa/HyperTween/blob/master/LICENSE.md",
+  "dependencies": {
+    "com.unity.entities": "1.3.9"
+ },
+ "keywords": [
+    "tween",
+    "entities",
+    "dots"
+  ],
+  "author": {
+    "name": "Dave Rzepa",
+    "url": "https://github.com/davidrzepa"
+  },
+  "samples": [
+	{
+      "displayName": "Examples.Core",
+      "description": "Examples for use in the documentation",
+      "path": "Samples~/Examples.Core"
+    },
+    {
+      "displayName": "Polyrhythm",
+      "description": "A test bed for using HyperTween with accurate timing",
+      "path": "Samples~/Polyrhythm"
+    },
+    {
+      "displayName": "Modules.UI",
+      "description": "A module with tween outputs for Unity.UI",
+      "path": "Samples~/Modules.UI"
+    },
+    {
+      "displayName": "Examples.UI",
+      "description": "UI Examples for use in the documentation",
+      "path": "Samples~/Examples.UI"
+    }
+  ]
+}

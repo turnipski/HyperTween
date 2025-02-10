@@ -1,0 +1,28 @@
+{
+    "name": "PrimeTween.PerformanceTests",
+    "rootNamespace": "",
+    "references": [
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:80ecb87cae9c44d19824e70ea7229748",
+        "GUID:d121f9a04233ea24a95191d098799465",
+        "GUID:d8b63aba1907145bea998dd612889d6b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "PRIME_TWEEN_INSTALLED"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.kyrylokuzyk.primetween",
+            "expression": "1.0.0",
+            "define": "PRIME_TWEEN_INSTALLED"
+        }
+    ],
+    "noEngineReferences": false
+}

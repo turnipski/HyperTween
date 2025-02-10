@@ -1,0 +1,22 @@
+{
+    "name": "HyperWare.HyperTween.PerformanceTests",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2665a8d13d1b3f18800f46e256720795",
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:d121f9a04233ea24a95191d098799465",
+        "GUID:48548867fc693034883d987a25783747",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:44dcb2bf5b9be4b5aa76674c8edcd1d5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

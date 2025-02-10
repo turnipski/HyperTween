@@ -1,0 +1,13 @@
+#logo {
+    margin-right: 10px;
+	width: 32px;
+	height: 32px;
+}
+
+[data-bs-theme=dark] #logo {
+    content:url("../images/dark-logo.png");
+}
+
+[data-bs-theme=light] #logo {
+    content:url("../images/light-logo.png");
+}

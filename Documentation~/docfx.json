@@ -1,0 +1,52 @@
+{
+    "build": {
+        "content": [
+            {
+                "files": [
+                    "*.{md,yml}",
+                    "docs/*.{md,yml}",
+                    "api/*.yml"
+                ]
+            }
+        ],
+        "resource": [
+            {
+                "files": [
+                    "images/**"
+                ],
+                "exclude": [
+                    "**/*.py",
+                    "**/*.xml"
+                ]
+            }
+        ],
+        "output": "_site",
+        "template": [
+            "default",
+            "modern",
+            "logo-template"
+        ],
+        "globalMetadata": {
+            "_appName": "HyperTween",
+            "_appTitle": "HyperTween",
+            "_enableSearch": true,
+            "pdf": false,
+            "_appFaviconPath": "images/dark-logo.png"
+        },
+        "sitemap": {
+            "baseUrl": "https://github.com/david-rzepa/HyperTween",
+            "changefreq": "weekly",
+            "fileOptions": {
+                "api/*": {
+                    "changefreq": "daily"
+                }
+            }
+        },
+        "xref": [
+            "https://normanderwan.github.io/UnityXrefMaps/xrefmap.yml"
+        ],
+        "xrefService": [
+            "https://xref.docs.microsoft.com/query?uid={uid}"
+        ]
+    }
+}

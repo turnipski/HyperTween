@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Deterministic>True</Deterministic>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference ExcludeAssets="runtime" Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\..\Library\PackageCache\com.unity.entities@732b1f537003\Unity.Entities\SourceGenerators\Source~\Common\Common.csproj" />
+    </ItemGroup>
+
+    <Target Name="CustomAfterBuild" AfterTargets="Publish">
+      <ItemGroup>
+        <_FilesToCopy Include="$(OutputPath)**\$(AssemblyName).dll" /><_FilesToCopy Include="$(OutputPath)**\$(AssemblyName).pdb" />
+      </ItemGroup>
+      <Copy SourceFiles="@(_FilesToCopy)" DestinationFolder="$(OutputPath)..\..\..\..\.." />
+    </Target>
+
+    <ItemGroup>
+        <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
+        <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+    </ItemGroup>
+</Project>

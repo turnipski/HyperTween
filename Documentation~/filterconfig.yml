@@ -1,0 +1,14 @@
+### YamlMime:ManagedReference
+apiRules:
+- include: # The namespaces to generate
+    uidRegex: ^HyperTween\..*
+    type: Namespace
+- exclude:
+    hasAttribute:
+      uid: System.Runtime.CompilerServices.CompilerGeneratedAttribute
+- exclude:
+    uidRegex: ^System\.Object
+    type: Type
+- exclude:
+    uidRegex: ^System\.ValueType
+    type: Type
