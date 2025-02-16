@@ -162,8 +162,9 @@ public class TweenInvokeSystemGenerator : ISourceGenerator
 
         var usings = string.Join("\n", invokeMethodParameters
             .Zip(Enumerable.Range(0, invokeMethodParameters.Length), (parameter, i) => (parameter, i))
-            .Select(tuple => tuple.parameter.GetUsing(tuple.i))
+            .Select(tuple => tuple.parameter.GetUsing(tuple.i).Trim())
             .Append($"using {componentNamespace};")
+            .Append("using HyperTween.ECS.Update.Components;")
             .Distinct());
 
         var jobData = string.Join("\n", invokeMethodParameters
@@ -196,9 +197,11 @@ public class TweenInvokeSystemGenerator : ISourceGenerator
                 .GetRoot()
                 .DescendantNodes()
                 .OfType<UsingDirectiveSyntax>())
-            .Select(syntax => syntax.ToFullString())
+            .Select(syntax => syntax.ToFullString().Trim())
             // Because the generated component will have a different namespace
-            .Append($"using {symbol.ContainingNamespace};"));
+            .Append($"using {symbol.ContainingNamespace};")
+            .Append("using HyperTween.ECS.Update.Components;")
+            .Distinct());
         
         var componentMembers =  string.Join("\n", symbol
             .GetMemberSyntax()
@@ -246,7 +249,7 @@ public class TweenInvokeSystemGenerator : ISourceGenerator
             yield return $$"""
                            {{componentUsings}}
                            using Unity.Burst;
-
+                           
                            namespace HyperTween.Auto.Components
                            {
                                [global::System.Runtime.CompilerServices.CompilerGenerated]

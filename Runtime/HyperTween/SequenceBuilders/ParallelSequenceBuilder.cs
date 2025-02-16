@@ -9,7 +9,7 @@ namespace HyperTween.SequenceBuilders
 {
     public struct ParallelSequenceBuilder<TTweenBuilder> : ISequenceBuilder<TTweenBuilder> where TTweenBuilder : unmanaged, ITweenBuilder
     {
-        public TweenHandle<TTweenBuilder> Build(TTweenBuilder tweenBuilder, NativeList<TweenHandle<TTweenBuilder>> subTweens, Allocator allocator)
+        public TweenHandle<TTweenBuilder> Build(TTweenBuilder tweenBuilder, NativeList<TweenHandle> subTweens, Allocator allocator)
         {
             var entity = tweenBuilder.CreateEntity();
             tweenBuilder.AddComponent<TweenDurationOverflow>(entity);

@@ -9,7 +9,7 @@ namespace HyperTween.SequenceBuilders
 {
     public struct SerialSequenceBuilder<TTweenBuilder> : ISequenceBuilder<TTweenBuilder> where TTweenBuilder : unmanaged, ITweenBuilder
     {
-        public TweenHandle<TTweenBuilder> Build(TTweenBuilder tweenBuilder, NativeList<TweenHandle<TTweenBuilder>> subTweens, Allocator allocator)
+        public TweenHandle<TTweenBuilder> Build(TTweenBuilder tweenBuilder, NativeList<TweenHandle> subTweens, Allocator allocator)
         {
             var entity = tweenBuilder.CreateEntity();
             tweenBuilder.AddComponent<TweenDurationOverflow>(entity);
@@ -34,7 +34,7 @@ namespace HyperTween.SequenceBuilders
                     previousTweenHandle.PlayOnStop(subTween);
                 }
 
-                previousTweenHandle = subTween;
+                previousTweenHandle = new TweenHandle<TTweenBuilder>(subTween.Entity, tweenBuilder);
             }
 
             return serialTweenHandle.StopOnJoin(previousTweenHandle);
