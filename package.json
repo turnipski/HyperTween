@@ -40,6 +40,16 @@
       "displayName": "Examples.UI",
       "description": "UI Examples for use in the documentation",
       "path": "Samples~/Examples.UI"
+    },
+    {
+      "displayName": "Modules.UniTask",
+      "description": "A module with integrations for UniTask",
+      "path": "Samples~/Modules.UniTask"
+    },
+    {
+      "displayName": "Examples.UniTask",
+      "description": "UniTask Examples for use in the documentation",
+      "path": "Samples~/Examples.UniTask"
     }
   ]
 }
