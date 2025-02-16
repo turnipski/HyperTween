@@ -9,6 +9,18 @@ using Unity.Transforms;
 
 namespace HyperTween.API
 {
+    public struct TweenHandle
+    {
+        private readonly Entity _entity;
+
+        public TweenHandle(Entity entity)
+        {
+            _entity = entity;
+        }
+
+        public Entity Entity => _entity;
+    }
+    
     public struct TweenHandle<TBuilder> : ITweenHandle 
         where TBuilder : unmanaged, ITweenBuilder
     {
@@ -17,13 +29,14 @@ namespace HyperTween.API
 
         public Entity Entity => _entity;
         public TBuilder TweenBuilder => _tweenBuilder;
-
         
         public TweenHandle(Entity entity, TBuilder tweenBuilder)
         {
             _entity = entity;
             _tweenBuilder = tweenBuilder;
         }
+        
+        public static implicit operator TweenHandle(TweenHandle<TBuilder> b) => new(b._entity);
         
         public TweenHandle<TBuilder> AllowReuse()
         {
@@ -109,43 +122,43 @@ namespace HyperTween.API
             return this;
         }
         
-        public TweenHandle<TBuilder> PlayOnPlay(TweenHandle<TBuilder> tweenHandle)
+        public TweenHandle<TBuilder> PlayOnPlay(TweenHandle tweenHandle)
         {
             _tweenBuilder.AddComponent(_entity, new TweenPlayOnPlay()
             {
-                Target = tweenHandle._entity
+                Target = tweenHandle.Entity
             });
 
             return this;
         }
 
-        public TweenHandle<TBuilder> PlayOnStop(TweenHandle<TBuilder> tweenHandle)
+        public TweenHandle<TBuilder> PlayOnStop(TweenHandle tweenHandle)
         {
             _tweenBuilder.AddComponent(_entity, new TweenPlayOnStop()
             {
-                Target = tweenHandle._entity
+                Target = tweenHandle.Entity
             });
 
             return this;
         }
         
-        internal TweenHandle<TBuilder> ForkOnPlay(NativeArray<TweenHandle<TBuilder>> tweenHandles) 
+        internal TweenHandle<TBuilder> ForkOnPlay(NativeArray<TweenHandle> tweenHandles) 
         {
             var buffer =  _tweenBuilder.AddBuffer<TweenForkOnPlay>(_entity);
             foreach (var tweenHandle in tweenHandles)
             {
                 buffer.Add(new TweenForkOnPlay()
                 {
-                    Target = tweenHandle._entity
+                    Target = tweenHandle.Entity
                 });
             }
 
             return this;
         }
         
-        internal TweenHandle<TBuilder> StopOnJoin(TweenHandle<TBuilder> tweenHandle)
+        internal TweenHandle<TBuilder> StopOnJoin(TweenHandle tweenHandle)
         {
-            _tweenBuilder.AddComponent(tweenHandle._entity, new TweenSignalJoinOnStop()
+            _tweenBuilder.AddComponent(tweenHandle.Entity, new TweenSignalJoinOnStop()
             {
                 Target = _entity
             });
@@ -158,13 +171,13 @@ namespace HyperTween.API
             return this;
         }
         
-        internal TweenHandle<TBuilder> StopOnJoin(NativeArray<TweenHandle<TBuilder>> tweenHandles)
+        internal TweenHandle<TBuilder> StopOnJoin(NativeArray<TweenHandle> tweenHandles)
         {
             var count = 0;
             
             foreach (var tweenHandle in tweenHandles)
             {
-                _tweenBuilder.AddComponent(tweenHandle._entity, new TweenSignalJoinOnStop()
+                _tweenBuilder.AddComponent(tweenHandle.Entity, new TweenSignalJoinOnStop()
                 {
                     Target = _entity
                 });

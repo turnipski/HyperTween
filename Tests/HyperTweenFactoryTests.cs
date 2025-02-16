@@ -126,7 +126,7 @@ namespace HyperTween.Tests
             var totalDuration = numTweens * duration;
         
             using var tweenHandles = Enumerable.Range(0, numTweens)
-                .Select(i => _tweenFactory.CreateTween().WithDuration(duration))
+                .Select(i => (TweenHandle)_tweenFactory.CreateTween().WithDuration(duration))
                 .ToNativeArray(Allocator.Temp);
 
             var serialTween = _tweenFactory
@@ -148,7 +148,7 @@ namespace HyperTween.Tests
             var duration = 0.2f;
         
             using var tweenHandles = Enumerable.Range(0, numTweens)
-                .Select(i => _tweenFactory.CreateTween().WithDuration(0.2f))
+                .Select(i => (TweenHandle)_tweenFactory.CreateTween().WithDuration(0.2f))
                 .ToNativeArray(Allocator.Temp);
 
             var parallelTween = _tweenFactory
@@ -177,11 +177,10 @@ namespace HyperTween.Tests
                 {
                     using var tweenHandles = Enumerable
                         .Range(0, numTweens)
-                        .Select(j => _tweenFactory.CreateTween()
-                            .WithDuration(duration))
+                        .Select(j => (TweenHandle)_tweenFactory.CreateTween().WithDuration(duration))
                         .ToNativeArray(Allocator.Temp);
 
-                    return _tweenFactory.Parallel(tweenHandles);
+                    return (TweenHandle)_tweenFactory.Parallel(tweenHandles);
                 })
                 .ToNativeArray(Allocator.Temp);
 

@@ -65,7 +65,7 @@ namespace HyperTween.API
             return new NativeArray<TweenHandle<TTweenBuilder>>(capacity, allocator);
         }
         
-        public TweenHandle<TTweenBuilder> Serial(NativeArray<TweenHandle<TTweenBuilder>> subTweens, Allocator allocator = Allocator.Temp)
+        public TweenHandle<TTweenBuilder> Serial(NativeArray<TweenHandle> subTweens, Allocator allocator = Allocator.Temp)
         {
             return Serial(allocator)
                 .Append(subTweens)
@@ -80,7 +80,7 @@ namespace HyperTween.API
                 allocator);
         }
         
-        public TweenHandle<TTweenBuilder> Parallel(NativeArray<TweenHandle<TTweenBuilder>> subTweens, Allocator allocator = Allocator.Temp)
+        public TweenHandle<TTweenBuilder> Parallel(NativeArray<TweenHandle> subTweens, Allocator allocator = Allocator.Temp)
         {
             return Parallel(allocator)
                 .Append(subTweens)
@@ -95,7 +95,7 @@ namespace HyperTween.API
                 allocator);
         }
         
-        public TweenHandle<TTweenBuilder> Stagger(NativeArray<TweenHandle<TTweenBuilder>> subTweens, float delayPerTween, Allocator allocator = Allocator.Temp)
+        public TweenHandle<TTweenBuilder> Stagger(NativeArray<TweenHandle> subTweens, float delayPerTween, Allocator allocator = Allocator.Temp)
         {
             return Stagger(delayPerTween, allocator)
                 .Append(subTweens)

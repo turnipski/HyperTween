@@ -13,7 +13,7 @@ namespace HyperTween.SequenceBuilders
             _delayPerTween = delayPerTween;
         }
 
-        public TweenHandle<TTweenBuilder> Build(TTweenBuilder tweenBuilder, NativeList<TweenHandle<TTweenBuilder>> subTweens, Allocator allocator)
+        public TweenHandle<TTweenBuilder> Build(TTweenBuilder tweenBuilder, NativeList<TweenHandle> subTweens, Allocator allocator)
         {
             var tweenFactory = new TweenFactory<TTweenBuilder>(tweenBuilder);
             var parallelBuilder = tweenFactory.Parallel(allocator);

@@ -10,7 +10,7 @@ namespace HyperTween.API
     {
         private TTweenBuilder _tweenBuilder;
         private TSequenceBuilder _sequenceBuilder;
-        private NativeList<TweenHandle<TTweenBuilder>> _subTweens;
+        private NativeList<TweenHandle> _subTweens;
         private Allocator _allocator;
         
         public SequenceFactory(TTweenBuilder tweenBuilder, TSequenceBuilder sequenceBuilder, Allocator allocator)
@@ -19,10 +19,10 @@ namespace HyperTween.API
             _sequenceBuilder = sequenceBuilder;
             _allocator = allocator;
             
-            _subTweens = new NativeList<TweenHandle<TTweenBuilder>>(2, allocator);
+            _subTweens = new NativeList<TweenHandle>(2, allocator);
         }
         
-        public SequenceFactory<TTweenBuilder, TSequenceBuilder> Append(IEnumerable<TweenHandle<TTweenBuilder>> subTweens)
+        public SequenceFactory<TTweenBuilder, TSequenceBuilder> Append(IEnumerable<TweenHandle> subTweens)
         {
             foreach (var subTween in subTweens)
             {
@@ -32,7 +32,7 @@ namespace HyperTween.API
             return this;
         }
         
-        public SequenceFactory<TTweenBuilder, TSequenceBuilder> Append(NativeArray<TweenHandle<TTweenBuilder>> subTweens)
+        public SequenceFactory<TTweenBuilder, TSequenceBuilder> Append(NativeArray<TweenHandle> subTweens)
         {
             foreach (var subTween in subTweens)
             {
@@ -42,7 +42,7 @@ namespace HyperTween.API
             return this;
         }
 
-        public SequenceFactory<TTweenBuilder, TSequenceBuilder> Append(TweenHandle<TTweenBuilder> subTween)
+        public SequenceFactory<TTweenBuilder, TSequenceBuilder> Append(TweenHandle subTween)
         {
             _subTweens.Add(subTween);
 
@@ -60,7 +60,7 @@ namespace HyperTween.API
                 
                 if (_subTweens.Length == 1)
                 {
-                    return _subTweens[0];
+                    return new TweenHandle<TTweenBuilder>(_subTweens[0].Entity, _tweenBuilder);
                 }
                 
                 return _sequenceBuilder.Build(_tweenBuilder, _subTweens, _allocator);
