@@ -11,6 +11,8 @@ using HyperTween.Util;
 using NUnit.Framework;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -213,6 +215,24 @@ namespace HyperTween.Tests
             } while (_world.EntityManager.HasComponent<TweenPlaying>(tweenHandle.Entity));
         
             Assert.AreEqual(expectedPosition, gameObject.transform.position);
+        }
+        
+        [UnityTest]
+        public IEnumerator IndirectTween_WithTargetLocalTransform_CorrectPosition()
+        {
+            var expectedPosition = new float3(1f, 2f, 3f);
+
+            var otherEntity = _world.EntityManager.CreateEntity();
+            _world.EntityManager.AddComponent<LocalTransform>(otherEntity);
+            
+            _tweenFactory.CreateTween()
+                .WithTarget(otherEntity)
+                .WithLocalPositionOutput(expectedPosition)
+                .Play();
+            
+            yield return new WaitForEndOfFrame();
+
+            Assert.AreEqual(expectedPosition, _world.EntityManager.GetComponentData<LocalTransform>(otherEntity).Position);
         }
         
         [UnityTest]
