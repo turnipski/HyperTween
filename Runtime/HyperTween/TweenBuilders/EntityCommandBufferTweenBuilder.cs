@@ -7,15 +7,19 @@ namespace HyperTween.TweenBuilders
     {
         private EntityCommandBuffer _entityCommandBuffer;
 
-        public EntityCommandBufferTweenBuilder(EntityCommandBuffer entityCommandBuffer)
+        public EntityCommandBufferTweenBuilder(WorldUnmanaged worldUnmanaged, EntityCommandBuffer entityCommandBuffer)
         {
+            WorldUnmanaged = worldUnmanaged;
             _entityCommandBuffer = entityCommandBuffer;
         }
 
+        public WorldUnmanaged WorldUnmanaged { get; }
+
         public EntityCommandBufferParallelWriterTweenBuilder AsParallelWriter()
         {
-            return new EntityCommandBufferParallelWriterTweenBuilder(_entityCommandBuffer.AsParallelWriter());
+            return new EntityCommandBufferParallelWriterTweenBuilder(WorldUnmanaged, _entityCommandBuffer.AsParallelWriter());
         }
+
 
         public Entity CreateEntity()
         {

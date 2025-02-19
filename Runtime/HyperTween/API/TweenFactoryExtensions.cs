@@ -16,7 +16,7 @@ namespace HyperTween.API
         {
             return world.Unmanaged.CreateTweenFactory(withJournaling);
         }
-        
+
         public static TweenFactory<EntityCommandBufferTweenBuilder> CreateTweenFactory(this WorldUnmanaged world, bool withJournaling = false)
         {
             using var entityQueryBuilder = new EntityQueryBuilder(Allocator.Temp);
@@ -28,17 +28,17 @@ namespace HyperTween.API
 
             var singleton = query.GetSingleton<PreTweenStructuralChangeECBSystem.Singleton>();
             
-            return singleton.CreateCommandBuffer(world).CreateTweenFactory(withJournaling);
+            return singleton.CreateCommandBuffer(world).CreateTweenFactory(world, withJournaling);
         }
 
         public static TweenFactory<EntityManagerTweenBuilder> CreateTweenFactory(this EntityManager entityManager, bool withJournaling = false)
         {
-            return new EntityManagerTweenBuilder(entityManager).CreateTweenFactory(withJournaling);
+            return new EntityManagerTweenBuilder(entityManager.WorldUnmanaged, entityManager).CreateTweenFactory(withJournaling);
         }
 
-        public static TweenFactory<EntityCommandBufferTweenBuilder> CreateTweenFactory(this EntityCommandBuffer entityCommandBuffer, bool withJournaling = false)
+        public static TweenFactory<EntityCommandBufferTweenBuilder> CreateTweenFactory(this EntityCommandBuffer entityCommandBuffer, WorldUnmanaged worldUnmanaged, bool withJournaling = false)
         {
-            return new EntityCommandBufferTweenBuilder(entityCommandBuffer).CreateTweenFactory(withJournaling);
+            return new EntityCommandBufferTweenBuilder(worldUnmanaged, entityCommandBuffer).CreateTweenFactory(withJournaling);
         }
 
         public static TweenFactory<EntityCommandBufferParallelWriterTweenBuilder> AsParallelWriter(this TweenFactory<EntityCommandBufferTweenBuilder> tweenFactory)

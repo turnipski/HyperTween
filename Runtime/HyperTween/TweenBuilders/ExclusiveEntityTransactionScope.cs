@@ -40,7 +40,7 @@ namespace HyperTween.TweenBuilders
 
         public ExclusiveEntityTransactionTweenBuilder GetTweenBuilder()
         {
-            return new ExclusiveEntityTransactionTweenBuilder(_exclusiveEntityTransaction);
+            return new ExclusiveEntityTransactionTweenBuilder(_stagingWorld, _exclusiveEntityTransaction);
         }
 
         [BurstCompile]

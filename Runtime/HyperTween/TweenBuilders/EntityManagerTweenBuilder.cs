@@ -7,10 +7,13 @@ namespace HyperTween.TweenBuilders
     {
         private EntityManager _entityManager;
 
-        public EntityManagerTweenBuilder(EntityManager entityManager)
+        public EntityManagerTweenBuilder(WorldUnmanaged worldUnmanaged, EntityManager entityManager)
         {
+            WorldUnmanaged = worldUnmanaged;
             _entityManager = entityManager;
         }
+
+        public WorldUnmanaged WorldUnmanaged { get; }
 
         public Entity CreateEntity()
         {
