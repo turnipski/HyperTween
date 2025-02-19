@@ -47,6 +47,11 @@ namespace HyperTween.API
 
             return tweenHandle.AllowReuse();
         }
+        
+        public TweenHandle<TTweenBuilder> GetBuilder(TweenHandle tweenHandle)
+        {
+            return new TweenHandle<TTweenBuilder>(tweenHandle.Entity, _tweenBuilder);
+        }
 
         private void ConfigureTween(Entity entity)
         {

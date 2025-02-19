@@ -12,19 +12,28 @@ namespace HyperTween.API
     public struct TweenHandle
     {
         private readonly Entity _entity;
+        private readonly WorldUnmanaged _worldUnmanaged;
 
-        public TweenHandle(Entity entity)
+        public TweenHandle(Entity entity, WorldUnmanaged worldUnmanaged)
         {
             _entity = entity;
+            _worldUnmanaged = worldUnmanaged;
         }
 
         public Entity Entity => _entity;
+        public WorldUnmanaged World => _worldUnmanaged;
+
+        public TweenHandle<EntityCommandBufferTweenBuilder> GetBuilder()
+        {
+            return World.CreateTweenFactory().GetBuilder(this);
+        }
     }
     
     public struct TweenHandle<TBuilder> : ITweenHandle 
         where TBuilder : unmanaged, ITweenBuilder
     {
         private readonly Entity _entity;
+        private readonly WorldUnmanaged _worldUnmanaged;
         private TBuilder _tweenBuilder;
 
         public Entity Entity => _entity;
@@ -33,10 +42,11 @@ namespace HyperTween.API
         public TweenHandle(Entity entity, TBuilder tweenBuilder)
         {
             _entity = entity;
+            _worldUnmanaged = tweenBuilder.WorldUnmanaged;
             _tweenBuilder = tweenBuilder;
         }
         
-        public static implicit operator TweenHandle(TweenHandle<TBuilder> b) => new(b._entity);
+        public static implicit operator TweenHandle(TweenHandle<TBuilder> b) => new(b._entity, b._worldUnmanaged);
         
         public TweenHandle<TBuilder> AllowReuse()
         {

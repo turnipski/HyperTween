@@ -8,9 +8,11 @@ namespace HyperTween.Examples
     {
         private async void Start()
         {
-            await HyperTweenFactory.CreateTween()
-                .WithDuration(5f)
-                .Play()
+            var tweenHandle = (TweenHandle)HyperTweenFactory.CreateTween()
+                .WithDuration(1f)
+                .Play();
+            
+            await tweenHandle
                 .AsUniTask();
             
             Debug.Log("Tween task completed");

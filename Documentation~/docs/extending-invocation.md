@@ -7,6 +7,8 @@ Note that these interfaces define no methods because the code generation actuall
 * `Entity tweenEntity`
 * `Entity targetEntity`
 * `EntityCommandBuffer entityCommandBuffer`
+* `TweenFactory<EntityCommandBufferTweenBuilder> tweenFactory`
+* `TweenFactory<EntityCommandBufferParallelWriterTweenBuilder> tweenFactory`
 * Any type that inherits from `IComponentData`
 
 [!code-csharp[CS](../../Runtime/HyperTween/Modules/InvokeAction/Components/TweenInvokeAction.cs)]

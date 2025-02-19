@@ -6,6 +6,7 @@ namespace HyperTween.TweenBuilders
 {
     public interface ITweenBuilder
     {
+        public WorldUnmanaged WorldUnmanaged { get; }
         Entity CreateEntity();
         void DestroyEntity(Entity entity);
         void Instantiate(Entity prefab, NativeArray<Entity> entities);

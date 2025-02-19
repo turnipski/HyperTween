@@ -418,6 +418,8 @@ public class TweenInvokeSystemGenerator : ISourceGenerator
                            using HyperTween.ECS.Invoke.Systems;
                            using Unity.Collections;
                            using HyperTween.Auto.Components;
+                           using HyperTween.API;
+                           using HyperTween.TweenBuilders;
                            {{usings}}
 
                            namespace HyperTween.Auto.Systems
@@ -467,7 +469,8 @@ public class TweenInvokeSystemGenerator : ISourceGenerator
                                    {
                                        var ecbSingleton = _singletonQuery.GetSingleton<TweenStructuralChangeECBSystem.Singleton>();
                                        var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
-
+                                       var world = state.WorldUnmanaged;
+                                       
                                        {{updateJobDatas}}
                                        _jobData.EntityTypeHandle.Update(ref state);
                                        _jobData.TweenTargetTypeHandle.Update(ref state);

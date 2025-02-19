@@ -8,11 +8,14 @@ namespace HyperTween.TweenBuilders
         private ExclusiveEntityTransaction _exclusiveEntityTransaction;
         private EntityArchetype _emptyArchetype;
         
-        public ExclusiveEntityTransactionTweenBuilder(ExclusiveEntityTransaction exclusiveEntityTransaction)
+        public ExclusiveEntityTransactionTweenBuilder(WorldUnmanaged worldUnmanaged, ExclusiveEntityTransaction exclusiveEntityTransaction)
         {
+            WorldUnmanaged = worldUnmanaged;
             _exclusiveEntityTransaction = exclusiveEntityTransaction;
             _emptyArchetype = exclusiveEntityTransaction.CreateArchetype();
         }
+
+        public WorldUnmanaged WorldUnmanaged { get; }
 
         public Entity CreateEntity()
         {

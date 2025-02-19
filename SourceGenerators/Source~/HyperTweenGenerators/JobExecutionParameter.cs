@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Unity.Entities.SourceGen.Common;
 
@@ -17,7 +18,9 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
         TweenEntity,
         TargetEntity,
         EntityCommandBuffer,
-        ParallelEntityCommandBuffer
+        ParallelEntityCommandBuffer,
+        TweenFactory,
+        ParallelTweenFactory
     }
 
     private readonly Type _type = GetType(parameterSymbol, invokeComponentSymbol);
@@ -26,7 +29,7 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
     {
         var fullName = parameterSymbol.Type.GetFullName();
         
-        if (fullName== "Unity.Entities.ComponentLookup")
+        if (fullName == "Unity.Entities.ComponentLookup")
         {
             return parameterSymbol.RefKind switch
             {
@@ -64,7 +67,7 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
                 _ => throw new InvalidOperationException("Entity parameters must either be named tweenEntity or targetEntity.")
             };
         }
-        if (fullName== "Unity.Entities.EntityCommandBuffer")
+        if (fullName == "Unity.Entities.EntityCommandBuffer")
         {
             return parameterSymbol.RefKind switch
             {
@@ -72,12 +75,28 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
                 _ => throw new InvalidOperationException("No RefKind expected for EntityCommandBuffer.")
             };
         } 
-        if (fullName== "Unity.Entities.EntityCommandBuffer.ParallelWriter")
+        
+        if (fullName == "Unity.Entities.EntityCommandBuffer.ParallelWriter")
         {
             return parameterSymbol.RefKind switch
             {
                 RefKind.None => Type.ParallelEntityCommandBuffer,
                 _ => throw new InvalidOperationException("No RefKind expected for EntityCommandBuffer.")
+            };
+        }
+        
+        if (fullName == "HyperTween.API.TweenFactory")
+        {
+            if (!parameterSymbol.Type.TryGetGenericTypeArguments(out var typeArgumentSymbols))
+            {
+                throw new InvalidOperationException("Expected TweenFactory to have generic args");
+            }
+            
+            return (parameterSymbol.RefKind, typeArgumentSymbols.First().GetFullName()) switch
+            {
+                (RefKind.None,"HyperTween.TweenBuilders.EntityCommandBufferTweenBuilder") => Type.TweenFactory,
+                (RefKind.None,"HyperTween.TweenBuilders.EntityCommandBufferParallelWriterTweenBuilder")  => Type.ParallelTweenFactory,
+                _ => throw new InvalidOperationException("No RefKind expected for TweenFactory and TweenFactory type must be EntityCommandBufferTweenBuilder or EntityCommandBufferParallelWriterTweenBuilder.")
             };
         }
 
@@ -116,6 +135,10 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
                 return $"public EntityCommandBuffer {parameterSymbol.Name}_{index}_ECB;";
             case Type.ParallelEntityCommandBuffer:
                 return $"public EntityCommandBuffer.ParallelWriter {parameterSymbol.Name}_{index}_ECBPW;";
+            case Type.TweenFactory:
+                return $"public TweenFactory<EntityCommandBufferTweenBuilder> {parameterSymbol.Name}_{index}_TweenFactory;";
+            case Type.ParallelTweenFactory:
+                return $"public TweenFactory<EntityCommandBufferParallelWriterTweenBuilder> {parameterSymbol.Name}_{index}_ParallelTweenFactory;";
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -157,6 +180,10 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
                 return $"var {parameterSymbol.Name}_{index}_ECB = jobData.{parameterSymbol.Name}_{index}_ECB;";
             case Type.ParallelEntityCommandBuffer:
                 return $"var {parameterSymbol.Name}_{index}_ECB = jobData.{parameterSymbol.Name}_{index}_ECBPW;";
+            case Type.TweenFactory:
+                return $"var {parameterSymbol.Name}_{index}_TweenFactory = jobData.{parameterSymbol.Name}_{index}_TweenFactory;";
+            case Type.ParallelTweenFactory:
+                return $"var {parameterSymbol.Name}_{index}_ParallelTweenFactory = jobData.{parameterSymbol.Name}_{index}_ParallelTweenFactory;";
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -183,6 +210,10 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
                 return "// No Read For ECB";
             case Type.ParallelEntityCommandBuffer:
                 return "// No Read For ECBPW";
+            case Type.TweenFactory:
+                return "// No Read For TweenFactory";
+            case Type.ParallelTweenFactory:
+                return "// No Read For ParallelTweenFactory";
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -202,6 +233,8 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
             Type.ParallelEntityCommandBuffer => $"{parameterSymbol.Name}_{index}_ECBPW",
             Type.ReadOnlyIndirectComponent => $"{parameterSymbol.Name}_{index}_Lookup",
             Type.IndirectComponent => $"{parameterSymbol.Name}_{index}_Lookup",
+            Type.TweenFactory => $"{parameterSymbol.Name}_{index}_TweenFactory",
+            Type.ParallelTweenFactory => $"{parameterSymbol.Name}_{index}_ParallelTweenFactory",
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -210,10 +243,6 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
     {
         switch (_type)
         {
-            case Type.UnmanagedReadOnlyDirectComponent:
-            case Type.ManagedReadOnlyDirectComponent:
-            case Type.ManagedDirectComponent:
-                return $"";
             case Type.UnmanagedDirectComponent:
                 return $"{parameterSymbol.Name}_{index}_Array[i] = {parameterSymbol.Name}_{index};";
             default:
@@ -240,8 +269,9 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
             case Type.TargetEntity:
                 return "// TargetEntity no GetInitialiseJobData definition required";
             case Type.EntityCommandBuffer:
-                return string.Empty;
             case Type.ParallelEntityCommandBuffer:
+            case Type.TweenFactory:
+            case Type.ParallelTweenFactory:
                 return string.Empty;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -268,6 +298,10 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
                 return $"_jobData.{parameterSymbol.Name}_{index}_ECB = ecb;";
             case Type.ParallelEntityCommandBuffer:
                 return $"_jobData.{parameterSymbol.Name}_{index}_ECBPW = ecb.AsParallelWriter();";
+            case Type.TweenFactory:
+                return $"_jobData.{parameterSymbol.Name}_{index}_TweenFactory = ecb.CreateTweenFactory(world);";
+             case Type.ParallelTweenFactory:
+                return $"_jobData.{parameterSymbol.Name}_{index}_ParallelTweenFactory = ecb.CreateTweenFactory(world).AsParallelWriter();";
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -285,6 +319,7 @@ public class JobExecutionParameter(IParameterSymbol parameterSymbol, ITypeSymbol
             Type.TargetEntity => true,
             Type.EntityCommandBuffer => false,
             Type.ParallelEntityCommandBuffer => true,
+            Type.TweenFactory => false,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
