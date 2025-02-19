@@ -28,7 +28,7 @@ public partial struct ExclusiveEntityTransationTweenExampleSystem : ISystem
             var random = new Random(1);
             for (var i = 0; i < positions.Length; i++)
             {
-                positions[i] = random.NextFloat3();
+                positions[i] = -5f + (10f * random.NextFloat3());
             }
 
             using var batchTweenHandle = TweenFactory.CreateTween()
@@ -50,10 +50,10 @@ public partial struct ExclusiveEntityTransationTweenExampleSystem : ISystem
         state.RequireForUpdate<EndInitializationEntityCommandBufferSystem.Singleton>();
 
         _entityQuery = new EntityQueryBuilder(Allocator.Temp)
-            .WithAll<TweenTest>()
+            .WithAll<TestComponentA>()
             .Build(ref state);
         
-        state.RequireForUpdate<TweenTest>();
+        state.RequireForUpdate<TestComponentA>();
     }
 
     public void OnUpdate(ref SystemState state)
@@ -74,6 +74,6 @@ public partial struct ExclusiveEntityTransationTweenExampleSystem : ISystem
         
         exclusiveEntityTransactionScope.Playback();
 
-        ecb.RemoveComponent<TweenTest>(_entityQuery, EntityQueryCaptureMode.AtPlayback);
+        ecb.RemoveComponent<TestComponentA>(_entityQuery, EntityQueryCaptureMode.AtPlayback);
     }
 }

@@ -45,7 +45,7 @@ namespace HyperTween.Examples
         {
             // Creates a tween for each transform that moves it to a random position
             var tweens = transforms
-                .Select(t => CreateRandomPositionTween(factory, t));
+                .Select(t => (TweenHandle)CreateRandomPositionTween(factory, t));
 
             // Creates a parallel sequence so that all the transforms move at the same time
             return factory.Parallel()
