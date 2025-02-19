@@ -305,7 +305,7 @@ public class TweenOutputSystemGenerator : ISourceGenerator
                                        _targetComponents = state.GetComponentLookup<{{targetComponentName}}>(false);
                            
                                        _query = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
-                                           .WithAll<{{fromComponentName}}, {{longName}}, {{targetComponentName}}, TweenParameter>()
+                                           .WithAll<{{fromComponentName}}, {{longName}}, TweenParameter>()
                                             .WithAny<TweenPlaying, TweenForceOutput>());
                                            
                                        state.RequireAnyForUpdate(_query);
