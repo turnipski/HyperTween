@@ -50,6 +50,16 @@
       "displayName": "Examples.UniTask",
       "description": "UniTask Examples for use in the documentation",
       "path": "Samples~/Examples.UniTask"
+    },
+    {
+      "displayName": "Modules.PlayableDirector",
+      "description": "A module with integrations for PlayableDirector",
+      "path": "Samples~/Modules.PlayableDirector"
+    },
+    {
+      "displayName": "Examples.PlayableDirector",
+      "description": "PlayableDirector Examples for use in the documentation",
+      "path": "Samples~/Examples.PlayableDirector"
     }
   ]
 }
